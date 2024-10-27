@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash Screen teması tanımlanıyor -->
+    <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
+        <!-- Splash Screen arka plan rengi beyaz olarak ayarlandı -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <!-- Splash Screen'da gösterilecek animasyonlu logo tanımlanıyor -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/card2qr_splash_screen_logo</item>
+        <!-- Splash Screen sonrası geçilecek tema ayarı yapılıyor -->
+        <item name="postSplashScreenTheme">@style/Theme.Card2QR</item>
+    </style>
+</resources>
