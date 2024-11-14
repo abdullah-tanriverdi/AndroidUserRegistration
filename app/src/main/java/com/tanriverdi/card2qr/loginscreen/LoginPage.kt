@@ -2,15 +2,9 @@ package com.tanriverdi.card2qr.loginscreen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
@@ -32,13 +26,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tanriverdi.card2qr.R
 
 
+// Poppins font ailesi tanımlamaları
 val poppinsMedium = FontFamily(Font(R.font.poppins_medium))
 val poppinsBold = FontFamily(Font(R.font.poppins_bold))
 val poppinsSemibold = FontFamily(Font(R.font.poppins_semibold))
@@ -48,16 +42,20 @@ val poppinsSemibold = FontFamily(Font(R.font.poppins_semibold))
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
 
+    // Kullanıcıdan alınacak e-posta ve şifreyi tutan state değişkenleri
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    // Authentication durumunu gözlemlemek için LiveData kullanımı
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
+    // Bilgi diyalog kutusunun gösterilmesi için state değişkeni
     var showInfoDialog by remember { mutableStateOf(false) }
 
 
 
+    // AuthState değeri değiştiğinde çalışacak efekt
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Authenicated -> navController.navigate("home"){
@@ -68,15 +66,18 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         }
     }
 
+
+    // Scaffold yapısı ile sayfa tasarımının temel yapısı oluşturuluyor
   Scaffold (
 
       topBar = {
 
+          // Üstteki uygulama çubuğu
       TopAppBar(
 
           title = { Text("Card2QR", style = TextStyle(fontFamily = poppinsSemibold, fontSize = 20.sp)) },
           navigationIcon = {
-
+// QR kod simgesi
                   Icon(
                       imageVector = Icons.Default.QrCode,  // QR kod simgesi
                       contentDescription = "QR Kod",
@@ -87,6 +88,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 
           actions = {
+              // Bilgi ikonu ve tıklanabilir olması
               IconButton(onClick = { showInfoDialog = true }) {
                   Icon(
                       imageVector = Icons.Default.Info, // Bilgi ikonu
@@ -99,7 +101,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
       )
   }){
-      // Dialog gösterme koşulu
+      // Bilgi diyalog kutusunun gösterilmesi
       if (showInfoDialog) {
           AlertDialog(
               onDismissRequest = { showInfoDialog = false },
@@ -123,6 +125,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
           )
       }
 
+      // Login sayfasının ana yapısı
       Column(
           modifier = modifier
               .fillMaxSize()
@@ -133,17 +136,19 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
           verticalArrangement = Arrangement.Center,
           horizontalAlignment = Alignment.CenterHorizontally
       ) {
+          // Başlık kısmı
           Text(
               text = "Giriş Yap",
-              fontSize = 36.sp, // Biraz daha büyük yazı boyutu
-              fontFamily = poppinsBold, // Bold font
-              color = colorResource(id = R.color.green), // Tek renk kullanımı
+              fontSize = 36.sp,
+              fontFamily = poppinsBold,
+              color = colorResource(id = R.color.green),
 
           )
 
 
           Spacer(modifier = Modifier.height(24.dp))
 
+          // E-posta giriş alanı
           OutlinedTextField(
               value = email,
               onValueChange = { email = it },
@@ -161,7 +166,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   Icon(
                       imageVector = Icons.Default.Email,
                       contentDescription = "E-Posta Ikonu",
-                      tint = colorResource(id = R.color.gray) // İkon rengi
+                      tint = colorResource(id = R.color.gray)
                   )
               },
               colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -179,7 +184,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
           var passwordVisibility by remember { mutableStateOf(false) } // Şifre görünürlüğü
 
-
+// Parola giriş alanı
           OutlinedTextField(
               value = password,
 
@@ -209,13 +214,13 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                       Icon(
                           imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                           contentDescription = if (passwordVisibility) "Şifreyi gizle" else "Şifreyi göster",
-                          tint = colorResource(id = R.color.gray) // İkon rengi
+                          tint = colorResource(id = R.color.gray)
                       )
                   }
               },
 
               leadingIcon = {
-                  // Göz simgesi çizik
+
                   Icon(
                       imageVector = Icons.Filled.Lock, // Kilit ikonu
                       contentDescription = "Kilit",
@@ -226,6 +231,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
           Spacer(modifier = Modifier.height(24.dp))
 
+          // Giriş yap butonu
           Button(
               onClick = {
                   authViewModel.login(email, password) // Giriş işlemini başlat
@@ -277,7 +283,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
           Spacer(modifier = Modifier.height(1.dp))
 
           TextButton(onClick = {
-              navController.navigate("resetPassword")
+              navController.navigate("resetPassword"){
+
+              }
 
           },
               modifier = Modifier.fillMaxWidth()

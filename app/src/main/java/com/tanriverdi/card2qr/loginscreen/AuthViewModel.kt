@@ -100,10 +100,8 @@ class AuthViewModel : ViewModel() {
             .addOnCompleteListener { task->
                 // İşlem başarılıysa, kullanıcı doğrulandı olarak işaretlenir.
                 if(task.isSuccessful){
-                  //  _authState.value=AuthState.Authenicated
-                    sendEmailVerification()
-
-                    auth.signOut()
+                    sendEmailVerification() // Kullanıcıya doğrulama e-postası gönderilir.
+                    auth.signOut() // Hesap oluşturulduktan sonra kullanıcı çıkış yapar.
                 }else{
                     // İşlem başarısızsa, hata mesajı görüntülenir.
                     _authState.value  = AuthState.Error(task.exception?.message?:"Bir Şeyler Ters Gitti")
@@ -111,13 +109,16 @@ class AuthViewModel : ViewModel() {
             }
     }
 
+    // Kullanıcıya doğrulama e-postası gönderen fonksiyon.
     private fun sendEmailVerification(){
         val user = auth.currentUser
         user?.sendEmailVerification()
             ?.addOnCompleteListener { task->
                 if (task.isSuccessful){
+                    // E-posta gönderimi başarılıysa, durum güncellenir.
                     _authState.value = AuthState.Success("Doğrulama E-postası Gönderildi. Lütfen E-Posta Adresinizi Kontrol Ediniz.")
                 }else{
+                    // E-posta gönderimi başarısızsa, hata mesajı gösterilir.
                     _authState.value = AuthState.Error("E-Posta Gönderilemedi: ${task.exception?.message}")
                 }
             }
@@ -135,6 +136,7 @@ class AuthViewModel : ViewModel() {
         _authState.value= AuthState.Unauthenticated
     }
 
+    // Şifre sıfırlama fonksiyonu.
     fun resetPassword(email: String){
         if (email.isEmpty()){
             _authState.value= AuthState.Error("E-Posta Boş Olamaz!")
@@ -147,6 +149,7 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful){
                     _authState.value= AuthState.Success("Şifre Sıfırlama E-Postası Gönderildi")
                 }else{
+                    // Şifre sıfırlama e-postası gönderilemezse hata mesajı görüntülenir.
                     _authState.value = AuthState.Error(task.exception?.message ?: "Bir Şeyler Ters Gitti")
 
                 }
@@ -154,11 +157,11 @@ class AuthViewModel : ViewModel() {
     }
 
 }
-// AuthState, kullanıcı kimlik doğrulama durumlarını temsil eden sealed class'tır
-sealed class AuthState{
-    object Authenicated : AuthState()
-    object Unauthenticated : AuthState()
-    object Loading : AuthState()
-    data class Error(val message : String) : AuthState()
-    data class Success (val message: String) : AuthState()
+// AuthState, kullanıcı kimlik doğrulama durumlarını temsil eden sealed class'tır.
+sealed class AuthState {
+    object Authenicated : AuthState() // Kullanıcı doğrulandı.
+    object Unauthenticated : AuthState() // Kullanıcı doğrulanmamış veya çıkış yaptı.
+    object Loading : AuthState() // İşlem yapılıyor.
+    data class Error(val message: String) : AuthState() // Hata durumu.
+    data class Success(val message: String) : AuthState() // Başarı durumu.
 }

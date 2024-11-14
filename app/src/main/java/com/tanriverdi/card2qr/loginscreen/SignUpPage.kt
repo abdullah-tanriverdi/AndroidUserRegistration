@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
@@ -33,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,7 +48,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import com.tanriverdi.card2qr.R
 
@@ -61,15 +57,14 @@ import com.tanriverdi.card2qr.R
 @Composable
 fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
 
-
+    // Kullanıcı bilgilerini saklamak için iki durum değişkeni oluşturuluyor
     var email by remember { mutableStateOf("") }
-
     var password by remember { mutableStateOf("") }
 
+    // Authentication durumu gözlemleniyor
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
-    var showDialog by remember { mutableStateOf(false) }  // Dialogu kontrol edecek durum
 
     LaunchedEffect(authState.value) {
         when(authState.value){
@@ -80,30 +75,6 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
         }
     }
 
-    // E-posta doğrulama dialogu
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("E-posta Onaylama") },
-            text = { Text("E-posta adresinize gelen bağlantıyı onaylayın.") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        // Kullanıcı onayladıktan sonra giriş ekranına yönlendirebiliriz
-                        navController.navigate("login")
-                        showDialog = false
-                    }
-                ) {
-                    Text("Tamam")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("İptal")
-                }
-            }
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -210,7 +181,7 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                 ),
 
                 leadingIcon = {
-                    // Göz simgesi çizik
+
                     Icon(
                         imageVector = Icons.Filled.Lock, // Kilit ikonu
                         contentDescription = "Kilit",

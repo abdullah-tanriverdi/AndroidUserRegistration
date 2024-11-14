@@ -2,14 +2,7 @@ package com.tanriverdi.card2qr.loginscreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
@@ -58,7 +51,6 @@ fun ResetPasswordPage(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        // Geri gitme işlemi, navController kullanılarak yapılabilir
                         navController.popBackStack()
                     }) {
                         Icon(
@@ -130,7 +122,7 @@ fun ResetPasswordPage(
                     .height(56.dp),
                 shape = MaterialTheme.shapes.medium.copy(CornerSize(12.dp)),
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green)),
-                        enabled = !isLoading
+                enabled = !isLoading
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
@@ -150,15 +142,15 @@ fun ResetPasswordPage(
             Spacer(modifier = Modifier.height(16.dp))
 
             when (authState) {
-                is AuthState.Loading -> {
-                    // Burada ek bir indicator olmasın çünkü buton üstündeki indicator kullanılacak
-                }
+
                 is AuthState.Success -> {
                     LaunchedEffect(Unit) {
-                        // Başarı durumunda, giriş ekranına yönlendirme
-                        navController.navigate("login") {
-                            popUpTo("resetPassword") { inclusive = true }
-                            launchSingleTop = true
+                        // Şifre sıfırlama başarılıysa, login sayfasına yönlendir
+                        if (navController.currentDestination?.route != "login") {
+                            navController.navigate("login") {
+                                // Mevcut sayfayı temizle
+                                popUpTo(0) { inclusive = false }
+                            }
                         }
                     }
                 }
