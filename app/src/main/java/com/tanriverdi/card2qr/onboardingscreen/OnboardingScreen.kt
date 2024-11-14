@@ -1,5 +1,9 @@
 package com.tanriverdi.card2qr.onboardingscreen
 
+import android.app.Activity
+import android.os.Build
+import android.view.View
+import android.view.WindowInsetsController
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,25 +14,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.tanriverdi.card2qr.R
 import kotlinx.coroutines.launch
 
+
 // FontFamily'i tanımlayın
 val poppinsMedium = FontFamily(Font(R.font.poppins_medium))
 
@@ -46,6 +48,22 @@ val poppinsMedium = FontFamily(Font(R.font.poppins_medium))
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(onFinished: () -> Unit) {
+    // Tam ekran modunu etkinleştirme
+    val context = LocalContext.current
+    val activity = context as? Activity
+    val systemUiVisibilityFlags = View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+
+    DisposableEffect(context) {
+        // Tam ekran moduna geçiş
+        activity?.window?.decorView?.systemUiVisibility = systemUiVisibilityFlags
+
+        onDispose {
+            // Tam ekran modundan çıkış (varsayılan görünüm)
+            activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        }
+    }
 
     // Onboarding sayfalarını tanımlayın
     val pages = listOf(
