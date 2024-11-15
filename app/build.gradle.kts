@@ -78,6 +78,9 @@ dependencies {
     // Splash Screen kütüphanesi
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation ("androidx.compose.material:material-icons-extended:1.4.0")
+    implementation("androidx.compose.material:material:1.3.0")
+    implementation ("com.github.0xRahad:RioBottomNavigation:1.0.2")
+
 
 
 }
