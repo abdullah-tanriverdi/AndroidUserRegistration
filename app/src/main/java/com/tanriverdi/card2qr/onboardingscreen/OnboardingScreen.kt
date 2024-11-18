@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -91,7 +92,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     // Scaffold bileşenini oluşturun
-    Scaffold( bottomBar = {
+    Scaffold(bottomBar = {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,13 +114,13 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent,
-                            contentColor = Color.Gray
+                            contentColor = MaterialTheme.colorScheme.surface
                         ),
-                        shape = MaterialTheme.shapes.small
+                        shape = MaterialTheme.shapes.medium
                     ) {
                         Text(
                             text = buttonState.value[0],  // Geri butonunun metni
-                            fontSize = 14.sp,
+                            fontSize = 16.sp,
                             fontFamily = poppinsMedium
                         )
                     }
@@ -128,7 +129,10 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 
             // Göstergeler
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                IndicatorUI(pageSize = pages.size, currentPage = pagerState.currentPage) // Mevcut sayfa göstergesi
+                IndicatorUI(
+                    pageSize = pages.size,
+                    currentPage = pagerState.currentPage
+                ) // Mevcut sayfa göstergesi
             }
 
             // İleri butonu
@@ -144,8 +148,8 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.scrim,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onBackground
                     ),
                     shape = MaterialTheme.shapes.small
                 ) {
@@ -158,19 +162,19 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             }
         }
     }) {
-        Column(Modifier.padding(it)) {
-            // Sayfa içeriklerini göstermek için HorizontalPager
-            HorizontalPager(state = pagerState) { index ->
-                OnboardingGraphUI(onboardingModel = pages[index]) // Sayfa grafik bileşeni
+        Column(
+            Modifier
+                .padding(it)
+                .fillMaxSize() // Ekranı tamamen kaplar
+        ) {
+            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { index ->
+                // İçeriğin tam ekran kaplaması
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    OnboardingGraphUI(onboardingModel = pages[index]) // Sayfa grafik bileşeni
+                }
             }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun OnboardingScreenPreview() {
-    OnboardingScreen {
 
-    }
 }

@@ -75,13 +75,14 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
           // Üstteki uygulama çubuğu
       TopAppBar(
 
+
           title = { Text("Card2QR", style = TextStyle(fontFamily = poppinsSemibold, fontSize = 20.sp)) },
           navigationIcon = {
 // QR kod simgesi
                   Icon(
                       imageVector = Icons.Default.QrCode,  // QR kod simgesi
                       contentDescription = "QR Kod",
-                      tint = Color.Black
+                      tint = MaterialTheme.colorScheme.primary
                   )
 
           },
@@ -93,10 +94,14 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   Icon(
                       imageVector = Icons.Default.Info, // Bilgi ikonu
                       contentDescription = "Bilgi",
-                      tint = colorResource(id = R.color.gray) // İkon rengi
+                      tint = MaterialTheme.colorScheme.primary// İkon rengi
                   )
               }
           },
+          colors = TopAppBarDefaults.topAppBarColors(
+              containerColor = MaterialTheme.colorScheme.background, // Arka plan rengi
+              titleContentColor = MaterialTheme.colorScheme.onBackground, // Başlık metni rengi
+          )
 
 
       )
@@ -110,18 +115,19 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                       Icon(
                           imageVector = Icons.Default.Info,
                           contentDescription = "Bilgi İkonu",
-                          tint = colorResource(id = R.color.gray),
+                          tint = MaterialTheme.colorScheme.primary,
                           modifier = Modifier.padding(end = 8.dp)
                       )
-                      Text("Bilgi" , fontFamily = poppinsSemibold)
+                      Text("Bilgi" , fontFamily = poppinsSemibold, color = MaterialTheme.colorScheme.onBackground, )
                   }
               },
-              text = { Text("Card2QR" , fontFamily = poppinsMedium) },
+              text = { Text("Card2QR" , fontFamily = poppinsMedium, color = MaterialTheme.colorScheme.onBackground) },
               confirmButton = {
                   TextButton(onClick = { showInfoDialog = false }) {
-                      Text("Tamam", fontFamily = poppinsMedium, color = colorResource(id = R.color.green))
+                      Text("Tamam", fontFamily = poppinsMedium, color = MaterialTheme.colorScheme.primary)
                   }
-              }
+              },
+              containerColor = MaterialTheme.colorScheme.background
           )
       }
 
@@ -130,7 +136,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
           modifier = modifier
               .fillMaxSize()
               .fillMaxWidth()
-              .background(colorResource(id= R.color.white))
+              .background(MaterialTheme.colorScheme.background)
               .padding(32.dp),
 
           verticalArrangement = Arrangement.Center,
@@ -141,7 +147,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
               text = "Giriş Yap",
               fontSize = 36.sp,
               fontFamily = poppinsBold,
-              color = colorResource(id = R.color.green),
+              color = MaterialTheme.colorScheme.onBackground,
 
           )
 
@@ -166,15 +172,15 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   Icon(
                       imageVector = Icons.Default.Email,
                       contentDescription = "E-Posta Ikonu",
-                      tint = colorResource(id = R.color.gray)
+                      tint = MaterialTheme.colorScheme.primary
                   )
               },
               colors = TextFieldDefaults.outlinedTextFieldColors(
-                  focusedBorderColor = colorResource(id = R.color.pink), // Odaklandığında pembe renk
-                  unfocusedBorderColor = colorResource(id = R.color.blue), // Normalde mavi kenarlık
-                  cursorColor = colorResource(id = R.color.green), // İmleç rengi
-                  focusedLabelColor = colorResource(id = R.color.pink), // Odaklandığında etiket rengi
-                  unfocusedLabelColor = colorResource(id = R.color.blue) // Normalde gri etiket rengi
+                  focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
+                  unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
+                  cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
+                  focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
+                  unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
               )
           )
 
@@ -202,11 +208,11 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 
               colors = TextFieldDefaults.outlinedTextFieldColors(
-                  focusedBorderColor = colorResource(id = R.color.pink), // Odaklandığında pembe renk
-                  unfocusedBorderColor = colorResource(id = R.color.blue), // Normalde mavi kenarlık
-                  cursorColor = colorResource(id = R.color.green), // İmleç rengi
-                  focusedLabelColor = colorResource(id = R.color.pink), // Odaklandığında etiket rengi
-                  unfocusedLabelColor = colorResource(id = R.color.blue) // Normalde gri etiket rengi
+                  focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
+                  unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
+                  cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
+                  focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
+                  unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
               ),
               trailingIcon = {
                   // Göz simgesi, şifreyi gösterme/gizleme
@@ -214,7 +220,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                       Icon(
                           imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                           contentDescription = if (passwordVisibility) "Şifreyi gizle" else "Şifreyi göster",
-                          tint = colorResource(id = R.color.gray)
+                          tint = MaterialTheme.colorScheme.primary
                       )
                   }
               },
@@ -224,7 +230,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   Icon(
                       imageVector = Icons.Filled.Lock, // Kilit ikonu
                       contentDescription = "Kilit",
-                      tint = colorResource(id = R.color.gray)
+                      tint = MaterialTheme.colorScheme.primary
                   )
               }
           )
@@ -241,7 +247,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   .fillMaxWidth()
                   .height(56.dp), // Buton yüksekliği
               shape = MaterialTheme.shapes.medium.copy(CornerSize(12.dp)), // Butonun köşe yuvarlatması
-              colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green)) // Buton rengi
+              colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface) // Buton rengi
           ) {
               // Eğer yükleme durumu varsa, yükleniyor göstergesi göster
               if (authState.value == AuthState.Loading) {
@@ -254,7 +260,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                       text = "Giriş Yap", // Buton metni
                       fontSize = 20.sp, // Yazı boyutu
                       fontFamily = poppinsSemibold, // Font ailesi
-                      color = Color.White // Yazı rengi
+                      color = MaterialTheme.colorScheme.onBackground // Yazı rengi
                   )
               }
           }
@@ -274,7 +280,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   text = "Hesabın Yok Mu? Hemen Kayıt Ol!",
                   fontSize = 14.sp,
                   fontFamily = poppinsMedium,
-                  color = colorResource(id=R.color.gray)
+                  color = MaterialTheme.colorScheme.onSurface
               )
           }
 
@@ -294,7 +300,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                   text = "Şifremi Unuttum",
                   fontFamily = poppinsMedium,
                   fontSize = 14.sp,
-                  color = colorResource(id= R.color.gray)
+                  color = MaterialTheme.colorScheme.onSurface
               )
           }
       }

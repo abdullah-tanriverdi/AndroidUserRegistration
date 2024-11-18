@@ -56,11 +56,14 @@ fun ResetPasswordPage(
                         Icon(
                             imageVector = Icons.Default.ArrowBack, // Geri gitme ikonu
                             contentDescription = "Geri",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
-                modifier = Modifier.background(colorResource(id = R.color.white))
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background, // Arka plan rengi
+                    titleContentColor = MaterialTheme.colorScheme.onBackground, // Başlık metni rengi
+                )
             )
         }
     ) {
@@ -68,7 +71,7 @@ fun ResetPasswordPage(
             modifier = modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .background(colorResource(id = R.color.white))
+                .background(MaterialTheme.colorScheme.background)
                 .padding(32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -77,7 +80,7 @@ fun ResetPasswordPage(
                 text = "Şifre Sıfırla",
                 fontSize = 36.sp,
                 fontFamily = poppinsBold,
-                color = colorResource(id = R.color.green)
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -101,11 +104,11 @@ fun ResetPasswordPage(
                     )
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = colorResource(id = R.color.pink),
-                    unfocusedBorderColor = colorResource(id = R.color.blue),
-                    cursorColor = colorResource(id = R.color.green),
-                    focusedLabelColor = colorResource(id = R.color.pink),
-                    unfocusedLabelColor = colorResource(id = R.color.blue)
+                    focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
+                    unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
+                    cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
+                    focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
+                    unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
                 )
             )
 
@@ -121,12 +124,12 @@ fun ResetPasswordPage(
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = MaterialTheme.shapes.medium.copy(CornerSize(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green)),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
                 enabled = !isLoading
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = colorResource(id= R.color.green),
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
@@ -134,7 +137,7 @@ fun ResetPasswordPage(
                         text = "Bağlantı Gönder",
                         fontSize = 16.sp,
                         fontFamily = poppinsSemibold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }

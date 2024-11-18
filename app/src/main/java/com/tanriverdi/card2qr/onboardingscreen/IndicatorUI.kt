@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 fun IndicatorUI(
     pageSize: Int, //Gösterge noktalarının sayısı
     currentPage: Int, //Aktif sayfa numarası
-    selectedColor: Color = MaterialTheme.colorScheme.scrim, // Seçili gösterge için renk
-    unselectedColor: Color = MaterialTheme.colorScheme.secondaryContainer // Seçili olmayan gösterge için renk
+    selectedColor: Color = MaterialTheme.colorScheme.surface, // Seçili gösterge için renk
+    unselectedColor: Color = MaterialTheme.colorScheme.primary // Seçili olmayan gösterge için renk
 
 
 

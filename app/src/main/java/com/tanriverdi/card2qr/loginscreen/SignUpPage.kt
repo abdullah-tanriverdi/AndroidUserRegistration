@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -82,7 +83,7 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                 title = {
                     Text(
                         "Card2QR",
-                        style = TextStyle(fontFamily = poppinsSemibold, fontSize = 20.sp)
+                        style = TextStyle(fontFamily = poppinsSemibold, fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground)
                     )
                 },
                 navigationIcon = {
@@ -93,12 +94,16 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                         Icon(
                             imageVector = Icons.Default.ArrowBack, // Geri gitme ikonu
                             contentDescription = "Geri",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
 
-                modifier = Modifier.background(colorResource(id = R.color.white))
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background, // Arka plan rengi
+                    titleContentColor = MaterialTheme.colorScheme.onBackground, // Başlık metni rengi
+                )
+
             )
         }
     ) {
@@ -106,7 +111,7 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
             modifier = modifier
                 .fillMaxSize()
                 .fillMaxWidth()
-                .background(colorResource(id= R.color.white))
+                .background(MaterialTheme.colorScheme.background)
                 .padding(32.dp),
 
             verticalArrangement = Arrangement.Center,
@@ -116,7 +121,7 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                 text = "Hesap Oluştur",
                 fontSize = 36.sp, // Biraz daha büyük yazı boyutu
                 fontFamily = poppinsBold, // Bold font
-                color = colorResource(id = R.color.green), // Tek renk kullanımı
+                color = MaterialTheme.colorScheme.onBackground, // Tek renk kullanımı
 
             )
 
@@ -141,16 +146,16 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                     Icon(
                         imageVector = Icons.Default.Email,
                         contentDescription = "E-Posta Ikonu",
-                        tint = colorResource(id = R.color.gray) // İkon rengi
+                        tint = MaterialTheme.colorScheme.primary // İkon rengi
                     )
                 },
 
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = colorResource(id = R.color.pink), // Odaklandığında pembe renk
-                    unfocusedBorderColor = colorResource(id = R.color.blue), // Normalde mavi kenarlık
-                    cursorColor = colorResource(id = R.color.green), // İmleç rengi
-                    focusedLabelColor = colorResource(id = R.color.pink), // Odaklandığında etiket rengi
-                    unfocusedLabelColor = colorResource(id = R.color.blue) // Normalde gri etiket rengi
+                    focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
+                    unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
+                    cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
+                    focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
+                    unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
                 )
             )
 
@@ -173,11 +178,11 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                 textStyle = TextStyle(fontFamily = poppinsMedium),
 
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = colorResource(id = R.color.pink), // Odaklandığında pembe renk
-                    unfocusedBorderColor = colorResource(id = R.color.blue), // Normalde mavi kenarlık
-                    cursorColor = colorResource(id = R.color.green), // İmleç rengi
-                    focusedLabelColor = colorResource(id = R.color.pink), // Odaklandığında etiket rengi
-                    unfocusedLabelColor = colorResource(id = R.color.blue) // Normalde gri etiket rengi
+                    focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
+                    unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
+                    cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
+                    focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
+                    unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
                 ),
 
                 leadingIcon = {
@@ -185,7 +190,7 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                     Icon(
                         imageVector = Icons.Filled.Lock, // Kilit ikonu
                         contentDescription = "Kilit",
-                        tint = colorResource(id = R.color.gray)
+                        tint = MaterialTheme.colorScheme.primary // İkon rengi
                     )
                 }
 
@@ -216,11 +221,11 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = MaterialTheme.shapes.medium.copy(CornerSize(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
@@ -228,7 +233,7 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                         text = "Hesap Oluştur",
                         fontSize = 20.sp,
                         fontFamily = poppinsSemibold,
-                        color = Color.White
+                        color =  MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -264,8 +269,8 @@ fun SignUpPage(modifier: Modifier = Modifier, navController: NavController, auth
                     text = "Zaten Hesabın Var Mı? Giriş Yap!",
                     fontSize = 14.sp,
                     fontFamily = poppinsMedium,
-                    color = colorResource(id = R.color.gray)
-                )
+                    color =  MaterialTheme.colorScheme.onSurface)
+
             }
 
 
