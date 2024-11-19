@@ -3,6 +3,7 @@ package com.tanriverdi.card2qr.loginscreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
@@ -27,6 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tanriverdi.card2qr.R
+import com.tanriverdi.card2qr.auth.AuthViewModel
+import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -36,133 +43,171 @@ fun ResetPasswordPage(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
-    var email by remember { mutableStateOf("") }
-    val authState by authViewModel.authState.observeAsState()
-    var isLoading by remember { mutableStateOf(false) }  // Buton üzerindeki indicator kontrolü
+    var email by remember { mutableStateOf("") }  // E-posta durumunu tutar
+    // Authentication durumunu gözlemlemek için LiveData kullanımı
+    val authState = authViewModel.authState.observeAsState()
 
+
+    // Scaffold kullanarak sayfa düzeni
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        "Card2QR",
-                        style = TextStyle(fontFamily = poppinsSemibold, fontSize = 20.sp)
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack, // Geri gitme ikonu
-                            contentDescription = "Geri",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
+                title = { TopBarTitleResetPassword() },
+
+                navigationIcon = { NavigateBackIconReset(navController) },
+
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background, // Arka plan rengi
                     titleContentColor = MaterialTheme.colorScheme.onBackground, // Başlık metni rengi
                 )
+
             )
         }
-    ) {
-        Column(
+    ){
+        LazyColumn (
             modifier = modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .background(MaterialTheme.colorScheme.background)
                 .padding(32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Şifre Sıfırla",
-                fontSize = 36.sp,
-                fontFamily = poppinsBold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("E-Posta", style = TextStyle(fontFamily = poppinsMedium)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.large.copy(CornerSize(24.dp)))
-                    .background(Color.Transparent),
-                singleLine = true,
-                shape = MaterialTheme.shapes.large.copy(CornerSize(24.dp)),
-                textStyle = TextStyle(fontFamily = poppinsMedium),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = "E-Posta Ikonu",
-                        tint = colorResource(id = R.color.gray)
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
-                    unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
-                    cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
-                    focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
-                    unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = {
-                    isLoading = true  // Buton üzerine indicator ekleyebilmek için loading durumunu aktif et
-                    authViewModel.resetPassword(email)
-                },
-
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = MaterialTheme.shapes.medium.copy(CornerSize(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
-                enabled = !isLoading
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(24.dp)
-                    )
-                } else {
-                    Text(
-                        text = "Bağlantı Gönder",
-                        fontSize = 16.sp,
-                        fontFamily = poppinsSemibold,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
+            item {
+                ResetPasswordTitle()
+                Spacer(modifier = Modifier.height(32.dp))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            when (authState) {
-
-                is AuthState.Success -> {
-                    LaunchedEffect(Unit) {
-                        // Şifre sıfırlama başarılıysa, login sayfasına yönlendir
-                        if (navController.currentDestination?.route != "login") {
-                            navController.navigate("login") {
-                                // Mevcut sayfayı temizle
-                                popUpTo(0) { inclusive = false }
-                            }
-                        }
-                    }
-                }
-                is AuthState.Error -> {
-                    // Hata durumunda, buton üzerindeki indicator'ü kapat
-                    isLoading = false
-                }
-                else -> {}
+            item {
+                EmailInputFieldResetPassword(email, onValueChange = { email = it })
+                Spacer(modifier = Modifier.height(16.dp))
             }
+
+            item {
+                ResetPasswordButton(email, authViewModel, authState, navController)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
         }
     }
+
 }
+
+@Composable
+fun TopBarTitleResetPassword() {
+    Text(
+        text = "Card2QR",
+        style = TextStyle(fontFamily = poppinsSemibold, fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground)
+    )
+}
+
+@Composable
+fun NavigateBackIconReset(navController: NavController) {
+    IconButton(onClick = {
+        navController.navigate("login"){
+            popUpTo("resetPassword"){ inclusive = true }
+        }
+    }) {
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "Geri",
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+fun ResetPasswordTitle(){
+    Text(
+        text = "Şifre Sıfırlama",
+        fontFamily = poppinsBold,
+        fontSize = 36.sp,
+        color = MaterialTheme.colorScheme.onBackground
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EmailInputFieldResetPassword(email: String, onValueChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = email,
+        onValueChange = onValueChange,
+        label = { Text("E-Posta", style = TextStyle(fontFamily = poppinsMedium))},
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.large.copy(CornerSize(24.dp)))
+            .background(Color.Transparent),
+        singleLine = true,
+        shape = MaterialTheme.shapes.large.copy(CornerSize(24.dp)),
+        textStyle = TextStyle(fontFamily = poppinsMedium),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Email,
+                contentDescription = "E-Posta Ikonu",
+                tint = MaterialTheme.colorScheme.primary
+
+            )
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında pembe renk
+            unfocusedBorderColor =MaterialTheme.colorScheme.primary, // Normalde mavi kenarlık
+            cursorColor = MaterialTheme.colorScheme.surfaceContainer, // İmleç rengi
+            focusedLabelColor = MaterialTheme.colorScheme.surfaceContainer, // Odaklandığında etiket rengi
+            unfocusedLabelColor = MaterialTheme.colorScheme.primary // Normalde gri etiket rengi
+        )
+
+    )}
+
+@Composable
+fun ResetPasswordButton(email: String, authViewModel: AuthViewModel, authState: State<AuthViewModel.AuthState?>, navController: NavController) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    Button(
+        onClick = {
+
+            when {
+                email.isBlank() -> {
+                    showToast(context, "Lütfen tüm alanları doldurun.")
+                }
+                !isValidEmail(email) -> {
+                    showToast(context, "Lütfen geçerli bir e-posta adresi girin.")
+                }
+                else -> {
+                    authState.value==AuthViewModel.AuthState.Loading// Buton üzerine indicator ekleyebilmek için loading durumunu aktif et
+                    authViewModel.resetPassword(email)
+                    showToast(context, "E-postanızı gelen bağlantıyı takip edin.")
+
+                    scope.launch {
+                        delay(1000)
+                        navController.navigate("login") {
+                            popUpTo("resetPassword") { inclusive = true } // Kayıt ekranını yığından kaldır
+                        }
+                    }
+
+                }
+            }
+        },
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = MaterialTheme.shapes.medium.copy(CornerSize(12.dp)),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
+        enabled = authState.value != AuthViewModel.AuthState.Loading
+    ) {
+        if (authState.value == AuthViewModel.AuthState.Loading) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.size(24.dp)
+            )
+        } else {
+            Text(
+                text = "Bağlantı Gönder",
+                fontSize = 16.sp,
+                fontFamily = poppinsSemibold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+    }
+
+}
+
+

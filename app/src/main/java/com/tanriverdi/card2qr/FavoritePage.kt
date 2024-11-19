@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.tanriverdi.card2qr.loginscreen.AuthViewModel
+import com.tanriverdi.card2qr.auth.AuthViewModel
 @Composable
-fun FavoritePage(modifier: Modifier= Modifier,navController: NavController, authViewModel: AuthViewModel ){
+fun FavoritePage(modifier: Modifier= Modifier,navController: NavController, authViewModel: AuthViewModel){
     MainScreenContent(navController, authViewModel)
 
 
